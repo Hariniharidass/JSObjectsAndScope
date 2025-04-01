@@ -74,3 +74,112 @@ The atm() function should be responsible for showing the user interface
 
 and based on the user input show the right meny choice
 */
+
+let account = {
+    error: "",
+    accountName: "",
+    balance: 0,
+    getBalance: function () {
+        console.log("The Balance amount in the account : " + this.balance);
+        atm();
+    },
+    deposit: function () {
+        var amount = prompt("Enter the amount to be deposited : ");
+        if (amount.match("^[0-9]*$")) {
+            amount = parseFloat(amount);
+            if (amount <= 0) {
+                this.error = "The amount to be deposited is less than or 0";
+                this.accountError(this.error);
+            }
+            else {
+                this.balance = parseFloat(this.balance) + parseFloat(amount);
+                console.log("The amount " + amount + " is deposited in the account");
+                this.getBalance();
+            }
+        }
+        else {
+            this.error = "Not a valid amount, Try again!";
+            this.accountError(this.error);
+        }
+
+    },
+    withDrawal: function () {
+        if (this.balance > 0) {
+            var amount = prompt("Enter the amount to be withdrawed : ");
+            if (amount.match("^[0-9]*$")) {
+
+                amount = parseFloat(amount);
+                if (amount > this.balance) {
+                    this.error = "The amount to be withdrawed is greater than balance amount"
+                    this.accountError(this.error);
+                }
+                else if (this.balance > 0 && this.balance >= amount) {
+                    this.balance = parseFloat(this.balance) - parseFloat(amount);
+                    console.log("The amount " + amount + " is withdrawn from the account");
+                    this.getBalance();
+                }
+            }
+            else {
+                this.error = "Not a valid amount, Try again!";
+                this.accountError(this.error);
+            }
+
+        }
+        else {
+            console.log("Oops! No sufficient balance.");
+            atm();
+        }
+
+
+    },
+    getAccountName: function () {
+        if (this.accountName) {
+            console.log("The account holders name : " + this.accountName);
+            atm();
+        }
+        else if (!this.accountName) {
+            const name = prompt("Enter the account holder name : ");
+            if (name.match("^[a-zA-Z]+$")) {
+                this.accountName = name;
+                console.log("The account holders name : " + this.accountName);
+                atm();
+            }
+            else {
+                this.error = "Not a valid name";
+                this.accountError(this.error);
+            }
+        }
+    },
+    accountError: function (errorMsg) {
+        console.log("Error : " + errorMsg);
+        atm();
+    },
+    exitAccount: function () {
+        console.log("Exiting Account!");
+        return;
+    }
+}
+
+function atm() {
+    const message = parseFloat(prompt("Welcome! \nSelect a choice \n1. Check your balance \n2. Make a deposit\n3. Make a withdrawal\n4. Get account name \n5. Exit"));
+    switch (message) {
+        case 1:
+            account.getBalance();
+            break;
+        case 2:
+            account.deposit();
+            break;
+        case 3:
+            account.withDrawal();
+            break;
+        case 4:
+            account.getAccountName();
+            break;
+        case 5:
+            account.exitAccount();
+            break;
+        default:
+            atm();
+    }
+}
+atm();
